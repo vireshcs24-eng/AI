@@ -1,0 +1,107 @@
+#1.DFS
+def dfs(start, goal):
+    stack = [(start, [])]
+    visited = set()
+    steps = 0
+
+    while stack:
+        state, path = stack.pop()
+
+        if state in visited:
+            continue
+
+        visited.add(state)
+        steps += 1
+
+        if state == goal:
+            print("Solution found:")
+            for s in path + [state]:
+                print(s[:3])
+                print(s[3:6])
+                print(s[6:])
+                print()
+            print("Total steps:", len(path))
+            print("Total states explored:", steps)
+            return
+
+        zero = state.index(0)
+        r, c = divmod(zero, 3)
+
+        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            nr, nc = r + dr, c + dc
+
+            if 0 <= nr < 3 and 0 <= nc < 3:
+                j = nr * 3 + nc
+                new = list(state)
+                new[zero], new[j] = new[j], new[zero]
+                new = tuple(new)
+
+                if new not in visited:
+                    stack.append((new, path + [state]))
+
+    print("Solution not found")
+
+
+start = (1, 2, 3, 4, 0, 6, 7, 5, 8)
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+
+dfs(start, goal)
+
+
+
+#2.IDS
+
+
+def ids(start, goal):
+    steps = 0
+
+    def dls(state, goal, limit, path):
+        nonlocal steps
+        steps += 1
+
+        if state == goal:
+            return path
+
+        if limit == 0:
+            return None
+
+        zero = state.index(0)
+        r, c = divmod(zero, 3)
+
+        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            nr, nc = r + dr, c + dc
+
+            if 0 <= nr < 3 and 0 <= nc < 3:
+                j = nr * 3 + nc
+                new = list(state)
+                new[zero], new[j] = new[j], new[zero]
+                new = tuple(new)
+
+                if new not in path:
+                    result = dls(new, goal, limit - 1, path + [new])
+                    if result:
+                        return result
+
+        return None
+
+    for depth in range(30):
+        result = dls(start, goal, depth, [start])
+
+        if result:
+            print("Solution found:")
+            for s in result:
+                print(s[:3])
+                print(s[3:6])
+                print(s[6:])
+                print()
+            print("Total steps:", len(result) - 1)
+            print("Total search visits:", steps)
+            return
+
+    print("Solution not found")
+
+
+start = (1, 2, 3, 4, 0, 6, 7, 5, 8)
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+
+ids(start, goal)
