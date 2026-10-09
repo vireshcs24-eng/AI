@@ -1,0 +1,79 @@
+#1.TIC TAC 
+
+board=[" " for i in range(9)]
+def display_board() :
+  print(board[0],"|",board[1],"|",board[2])
+  print(board[3],"|",board[4],"|",board[5])
+  print(board[6],"|",board[7],"|",board[8])
+
+def  check_winner(player):
+  winning_positions=[(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)]
+  for a,b,c in winning_positions:
+    if board[a]==board[b]==board[c]==player:
+      return True
+  return False
+
+def game():
+  player='X'
+  for turn in range(9):
+    display_board()
+
+    while True:
+        position=int(input("enter position 1 to 9: ")) - 1
+
+        if board[position] != " ":
+          print("Position occupied")
+        else:
+          break
+
+    board[position] = player
+
+    if check_winner(player):
+      display_board()
+      print("Winner:", player)
+      print("Loser:", "O" if player=="X" else "X")
+      break
+
+
+    if turn == 8:
+      display_board()
+      print("Draw")
+      break
+
+    player = "O" if player=="X" else "X"
+game()
+
+
+
+
+
+#2.Vaccum cleaner
+
+rooms = {
+    "A": "Dirty",
+    "B": "Dirty",
+    "C": "Dirty"
+}
+
+location = "A"
+
+while True:
+    print("\nCurrent location:", location)
+    print("Room status:", rooms)
+
+    if rooms[location] == "Dirty":
+        print("Action: Clean")
+        rooms[location] = "Clean"
+
+    else:
+        if location == "A":
+            location = "B"
+            print("Action: Move Right")
+
+        elif location == "B":
+            location = "C"
+            print("Action: Move Right")
+
+        elif location == "C":
+            print("Action: All rooms are clean!")
+            break
